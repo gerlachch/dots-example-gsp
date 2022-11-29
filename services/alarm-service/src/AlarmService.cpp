@@ -43,9 +43,7 @@ namespace examples
             for (const dots::uuid_t& alarmId : *alarmReset.alarms)
             {
                 if (auto* alarm = dots::container<Alarm>().find({ .id = alarmId }))
-                {
                     dots::remove(*alarm);
-                }
             }
         }
         else
@@ -60,9 +58,7 @@ namespace examples
     void AlarmService::handleSensor(const dots::Event<Sensor>& event)
     {
         if (!*m_config.enabled)
-        {
             return;
-        }
 
         const Sensor& sensor = event.updated();
         uint32_t& activatedCount = m_activatedCounts[*sensor.id];
@@ -79,8 +75,6 @@ namespace examples
             }
         }
         else
-        {
             activatedCount = 0;
-        }
     }
 }

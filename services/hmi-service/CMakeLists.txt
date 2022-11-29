@@ -42,7 +42,6 @@ target_sources(${TARGET_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         ${imgui_SOURCE_DIR}/imgui.cpp
         ${imgui_SOURCE_DIR}/imgui_draw.cpp
-        ${imgui_SOURCE_DIR}/imgui_demo.cpp
         ${imgui_SOURCE_DIR}/imgui_tables.cpp
         ${imgui_SOURCE_DIR}/imgui_widgets.cpp
 )

@@ -39,9 +39,7 @@ namespace examples
 
                 // entries
                 if (dots::container<SensorConfig>().empty())
-                {
                     ImGui::Text("<No Sensors>");
-                }
                 else if (ImGui::BeginTable("Sensors", 4, ImGuiTableFlags_Borders))
                 {
                     ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch);
@@ -85,9 +83,7 @@ namespace examples
                             ImGui::TextColored(color, "%d", *sensor->value);
                         }
                         else
-                        {
                             ImGui::Text("N/A");
-                        }
 
                         ImGui::EndDisabled();
                     });
@@ -117,9 +113,7 @@ namespace examples
 
                     ImGui::SameLine();
                     if (ImGui::Button("Reset All"))
-                    {
                         dots::publish(AlarmReset{});
-                    }
 
                     ImGui::Separator();
                 }
@@ -128,9 +122,7 @@ namespace examples
 
                 // entries
                 if (dots::container<Alarm>().empty())
-                {
                     ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 0.0f, 1.0f }, "<No Alarms>");
-                }
                 else if (ImGui::BeginTable("Alarms", 3, ImGuiTableFlags_Borders))
                 {
                     ImGui::TableSetupColumn("Reset", ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoHeaderLabel);

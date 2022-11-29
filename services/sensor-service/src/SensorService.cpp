@@ -33,9 +33,7 @@ namespace examples
     void SensorService::handleConfig(const dots::Event<SensorConfig>& event)
     {
         if (const SensorConfig& config = event.updated(); config.id == m_config.id)
-        {
             m_config._merge(config);
-        }
     }
 
     void SensorService::handleReadTimer()
