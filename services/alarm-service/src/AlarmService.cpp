@@ -15,7 +15,6 @@ namespace examples
             .threshold = 3
         },
         m_configSubscription{ dots::subscribe<AlarmConfig>({ &AlarmService::handleConfig, this }) },
-        m_resetSubscription{ dots::subscribe<AlarmReset>({ &AlarmService::handleReset, this }) },
         m_sensorSubscription{ dots::subscribe<Sensor>({ &AlarmService::handleSensor, this }) }
     {
         dots::publish(m_config);
@@ -34,25 +33,6 @@ namespace examples
     {
         const AlarmConfig& config = event.updated();
         m_config._merge(config);
-    }
-
-    void AlarmService::handleReset(const dots::Event<AlarmReset>& event)
-    {
-        if (const AlarmReset& alarmReset = event.transmitted(); alarmReset.alarms.isValid())
-        {
-            for (const dots::uuid_t& alarmId : *alarmReset.alarms)
-            {
-                if (auto* alarm = dots::container<Alarm>().find({ .id = alarmId }))
-                    dots::remove(*alarm);
-            }
-        }
-        else
-        {
-            dots::publish(DotsClearCache{
-                .typeNames = { dots::string_t{ Alarm::_Name } }
-            });
-            m_activatedCounts.clear();
-        }
     }
 
     void AlarmService::handleSensor(const dots::Event<Sensor>& event)

@@ -9,7 +9,3 @@ struct AlarmConfig {
     1: bool enabled;        // Specifies whether alarm detection is enabled.
     2: uint32 threshold;    // The number of consecutive activated events that are required for an alarm.
 }
-
-struct AlarmReset [cached=false] {
-    1: vector<uuid> alarms;    // The alarms to reset. Will reset all alarms if <invalid>.
-}

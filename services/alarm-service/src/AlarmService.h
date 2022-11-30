@@ -4,7 +4,6 @@
 #include <map>
 #include <dots/dots.h>
 #include <Sensor.dots.h>
-#include <AlarmReset.dots.h>
 #include <AlarmConfig.dots.h>
 
 namespace examples
@@ -22,13 +21,11 @@ namespace examples
     private:
 
         void handleConfig(const dots::Event<AlarmConfig>& event);
-        void handleReset(const dots::Event<AlarmReset>& event);
         void handleSensor(const dots::Event<Sensor>& event);
         
         std::map<dots::string_t, uint32_t> m_activatedCounts;
         AlarmConfig m_config;
         dots::Subscription m_configSubscription;
-        dots::Subscription m_resetSubscription;
         dots::Subscription m_sensorSubscription;
     };
 }

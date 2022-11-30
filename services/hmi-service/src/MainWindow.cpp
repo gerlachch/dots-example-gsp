@@ -6,7 +6,6 @@
 #include <SensorConfig.dots.h>
 #include <Alarm.dots.h>
 #include <AlarmConfig.dots.h>
-#include <AlarmReset.dots.h>
 
 namespace examples
 {
@@ -111,10 +110,6 @@ namespace examples
                         });
                     }
 
-                    ImGui::SameLine();
-                    if (ImGui::Button("Reset All"))
-                        dots::publish(AlarmReset{});
-
                     ImGui::Separator();
                 }
 
@@ -123,23 +118,14 @@ namespace examples
                 // entries
                 if (dots::container<Alarm>().empty())
                     ImGui::TextColored(ImVec4{ 0.0f, 1.0f, 0.0f, 1.0f }, "<No Alarms>");
-                else if (ImGui::BeginTable("Alarms", 3, ImGuiTableFlags_Borders))
+                else if (ImGui::BeginTable("Alarms", 2, ImGuiTableFlags_Borders))
                 {
-                    ImGui::TableSetupColumn("Reset", ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoHeaderLabel);
                     ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed);
                     ImGui::TableSetupColumn("Message", ImGuiTableColumnFlags_WidthStretch);
                     ImGui::TableHeadersRow();
 
                     dots::container<Alarm>().forEach([](const Alarm& alarm)
                     {
-                        ImGui::TableNextColumn();
-                        if (ImGui::Button(fmt::format("Reset##{}", alarm.id->toString()).data()))
-                        {
-                            dots::publish(AlarmReset{
-                                .alarms = { *alarm.id }
-                            });
-                        }
-
                         float timeIntegral;
                         float timeFraction = std::modf(static_cast<float>(ImGui::GetTime()), &timeIntegral);
                         ImVec4 color{ 1.0f, 0.0f, 0.0f, timeFraction };
