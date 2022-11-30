@@ -3,14 +3,13 @@
 #pragma once
 #include <random>
 #include <dots/dots.h>
-#include <SensorConfig.dots.h>
 #include <Sensor.dots.h>
 
 namespace examples
 {
     struct SensorService
     {
-        SensorService(std::string id, double px0);
+        SensorService(double px0);
         SensorService(const SensorService& other) = delete;
         SensorService(SensorService&& other) = default;
         ~SensorService();
@@ -22,14 +21,12 @@ namespace examples
 
         using rnd_t = std::mt19937_64;
 
-        void handleConfig(const dots::Event<SensorConfig>& event);
         void handleReadTimer();
 
         rnd_t m_rnd;
         double m_px0;
-        SensorConfig m_config;
+        dots::uint8_t m_sensitivity;
         Sensor m_sensor;
-        dots::Subscription m_configSubscription;
         dots::Timer m_readTimer;
     };
 }

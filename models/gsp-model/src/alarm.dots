@@ -1,11 +1,5 @@
 
 struct Alarm {
-    1: [key] uuid id;     // The unique id of the alarm.
-    2: string message;    // A user message describing the alarm.
-    3: timepoint time;    // The time when the alarm occurred.
-}
-
-struct AlarmConfig {
-    1: bool enabled;        // Specifies whether alarm detection is enabled.
-    2: uint32 threshold;    // The number of consecutive activated events that are required for an alarm.
+    1: string message;    // A user message describing the alarm.
+    2: timepoint time;    // The time when the alarm occurred.
 }

@@ -1,13 +1,6 @@
 
 struct Sensor {
-    1: [key] string id;             // The identifier of this sensor.
-    2: uint8 value;                 // The raw value of the sensor.
-    3: bool activated;              // Indicates whether the sensor's value has passed the sensitivity threshold.
-    4: timepoint lastActivation;    // Indicates the time when the sensor was last activated.
-}
-
-struct SensorConfig {
-    1: [key] string id;      // Identifies the sensor that is configured.
-    2: bool enabled;         // Specifies whether or not the sensor is enabled.
-    3: uint8 sensitivity;    // Specifies the sensitivity of the sensor.
+    1: uint8 value;                 // The raw value of the sensor.
+    2: bool activated;              // Indicates whether the sensor's value has passed the sensitivity threshold.
+    3: timepoint lastActivation;    // Indicates the time when the sensor was last activated.
 }

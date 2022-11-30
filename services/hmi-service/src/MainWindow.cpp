@@ -3,9 +3,7 @@
 #include <fmt/format.h>
 #include <dots/dots.h>
 #include <Sensor.dots.h>
-#include <SensorConfig.dots.h>
 #include <Alarm.dots.h>
-#include <AlarmConfig.dots.h>
 
 namespace examples
 {
@@ -37,55 +35,31 @@ namespace examples
                 }
 
                 // entries
-                if (dots::container<SensorConfig>().empty())
-                    ImGui::Text("<No Sensors>");
-                else if (ImGui::BeginTable("Sensors", 4, ImGuiTableFlags_Borders))
+                if (ImGui::BeginTable("Sensors", 3, ImGuiTableFlags_Borders))
                 {
                     ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch);
-                    ImGui::TableSetupColumn("Enabled", ImGuiTableColumnFlags_WidthFixed);
                     ImGui::TableSetupColumn("Sensitivity", ImGuiTableColumnFlags_WidthFixed);
                     ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthFixed);
                     ImGui::TableHeadersRow();
 
-                    dots::container<SensorConfig>().forEach([](const SensorConfig& sensorConfig)
                     {
                         ImGui::TableNextColumn();
-                        ImGui::Text("%s", sensorConfig.id->data());
-
-                        ImGui::TableNextColumn();
-                        bool sensorEnabled = *sensorConfig.enabled;
-                        if (ImGui::Checkbox(fmt::format("##{}Enabled", *sensorConfig.id).data(), &sensorEnabled))
-                        {
-                            dots::publish(SensorConfig{
-                                .id = *sensorConfig.id,
-                                .enabled = sensorEnabled
-                            });
-                        }
-
-                        ImGui::BeginDisabled(!sensorEnabled);
+                        ImGui::TextUnformatted("Lower Hallway");
 
                         ImGui::TableNextColumn();
                         ImGui::SetNextItemWidth(170.0f);
-                        if (int sensitivity = *sensorConfig.sensitivity; ImGui::SliderInt(fmt::format("##{}Sensitivity", *sensorConfig.id).data(), &sensitivity, 0, 100))
-                        {
-                            dots::publish(SensorConfig{
-                                .id = *sensorConfig.id,
-                                .sensitivity = static_cast<dots::uint8_t>(sensitivity)
-                            });
-                        }
+                        ImGui::TextUnformatted("25");
 
                         ImGui::TableNextColumn();
                         ImGui::SetNextItemWidth(170.0f);
-                        if (auto* sensor = dots::container<Sensor>().find({ .id = sensorConfig.id }))
+                        if (auto* sensor = dots::container<Sensor>().find())
                         {
                             ImVec4 color = *sensor->activated ? ImVec4{ 1.0f, 0.0f, 0.0f, 1.0f } : ImVec4{ 0.0f, 1.0f, 0.0f, 1.0f };
                             ImGui::TextColored(color, "%d", *sensor->value);
                         }
                         else
                             ImGui::Text("N/A");
-
-                        ImGui::EndDisabled();
-                    });
+                    }
 
                     ImGui::EndTable();
                 }
@@ -95,25 +69,11 @@ namespace examples
 
             // alarms
             {
-                auto* alarmConfig = dots::container<AlarmConfig>().find();
-                bool alarmsEnabled = alarmConfig ? *alarmConfig->enabled : false;
-
                 // header
                 {
                     ImGui::Text("--Alarms");
-
-                    ImGui::SameLine();
-                    if (ImGui::Checkbox("##AlarmsEnabled", &alarmsEnabled))
-                    {
-                        dots::publish(AlarmConfig{
-                            .enabled = alarmsEnabled
-                        });
-                    }
-
                     ImGui::Separator();
                 }
-
-                ImGui::BeginDisabled(!alarmsEnabled);
 
                 // entries
                 if (dots::container<Alarm>().empty())
@@ -139,8 +99,6 @@ namespace examples
 
                     ImGui::EndTable();
                 }
-
-                ImGui::EndDisabled();
             }
         }
 

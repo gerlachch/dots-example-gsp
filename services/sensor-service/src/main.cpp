@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
         // create application
         dots::Application app(AppName, argc, argv);
 
-        examples::SensorService sensorService{ argv[1], std::stod(argv[2])};
+        examples::SensorService sensorService{ std::stod(argv[1])};
 
         // execute event loop of application 
         return app.exec();

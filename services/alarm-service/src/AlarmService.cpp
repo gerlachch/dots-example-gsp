@@ -10,46 +10,30 @@ using namespace dots::literals;
 namespace examples
 {
     AlarmService::AlarmService() :
-        m_config{
-            .enabled = true,
-            .threshold = 3
-        },
-        m_configSubscription{ dots::subscribe<AlarmConfig>({ &AlarmService::handleConfig, this }) },
+        m_activatedCount(0),
         m_sensorSubscription{ dots::subscribe<Sensor>({ &AlarmService::handleSensor, this }) }
     {
-        dots::publish(m_config);
+        /* do nothing */
     }
 
     AlarmService::~AlarmService()
     {
-        dots::remove(m_config);
-
         dots::publish(DotsClearCache{
             .typeNames = { dots::string_t{ Alarm::_Name } }
         });
     }
 
-    void AlarmService::handleConfig(const dots::Event<AlarmConfig>& event)
-    {
-        const AlarmConfig& config = event.updated();
-        m_config._merge(config);
-    }
-
     void AlarmService::handleSensor(const dots::Event<Sensor>& event)
     {
-        if (!*m_config.enabled)
-            return;
-
         const Sensor& sensor = event.updated();
-        uint32_t& activatedCount = m_activatedCounts[*sensor.id];
+        uint32_t& activatedCount = m_activatedCount;
 
         if (*sensor.activated)
         {
-            if (activatedCount < *m_config.threshold && ++activatedCount >= *m_config.threshold)
+            if (activatedCount < 3 && ++activatedCount >= 3)
             {
                 dots::publish(Alarm{
-                    .id = dots::uuid_t::Random(),
-                    .message = fmt::format("Alarm in '{}'", *sensor.id),
+                    .message = fmt::format("Alarm in 'Lower Hallway'"),
                     .time = dots::timepoint_t::Now()
                 });
             }
